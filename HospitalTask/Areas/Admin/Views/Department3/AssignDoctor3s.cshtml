@@ -1,0 +1,19 @@
+﻿@using HospitalTask.Areas.ViewModels.Department3VMs
+
+@model BatchAssignVM;
+
+<h2> Assign Doctor3s to Department3</h2>
+<form method="post">
+    <input type="hidden" asp-for="Department3Id" />
+    <div class="form-group">
+
+
+		<select asp-items="Model.AllDoctor3s" asp-for="Doctor3Ids" class="form-select" multiple>
+            <option selected>Choose Doctor</option>
+           
+        </select>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
