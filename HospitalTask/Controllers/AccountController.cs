@@ -3,6 +3,7 @@ using HospitalTask.Models;
 using HospitalTask.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Threading.Tasks;
 
 namespace HospitalTask.Controllers
@@ -11,11 +12,14 @@ namespace HospitalTask.Controllers
     {
         private readonly AppDbContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         public AccountController(AppDbContext appDbContext,
-            UserManager<AppUser> userManager)
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager)
         {
             _context = appDbContext;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
         public IActionResult Register()
         {
@@ -45,6 +49,52 @@ namespace HospitalTask.Controllers
                 }
             }
             return RedirectToAction(nameof(Index), "Home");
+        }
+        [HttpGet]
+        public IActionResult Login ()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginUserVM loginUserVM)
+        {
+            
+            if (!ModelState.IsValid)
+            {
+
+                return View(loginUserVM);
+          
+            }
+            AppUser user = await _userManager.FindByNameAsync(loginUserVM.UsernameorEmailAddress);
+            if (user == null)
+            {
+                user = await _userManager.FindByEmailAsync(loginUserVM.UsernameorEmailAddress);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Username or email is wrong");
+                    return View(loginUserVM);
+                }
+            }
+           var result= await _signInManager.PasswordSignInAsync(user, loginUserVM.Password,loginUserVM.IsPersistent, true);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, "Password is wrong");
+                return View();
+            
+            }
+            
+            return RedirectToAction(nameof(Index), "Home");
+
+           
+            
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+         await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        
+        
         }
 
     }

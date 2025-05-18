@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\ViewModels\Doctor3VMs\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
 
 </Project>

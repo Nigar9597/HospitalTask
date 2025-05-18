@@ -35,6 +35,7 @@ namespace HospitalTask
 
             var app = builder.Build();
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.MapControllerRoute(
                   name: "areas",

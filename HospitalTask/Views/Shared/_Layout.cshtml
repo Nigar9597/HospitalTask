@@ -92,6 +92,23 @@
                     </div>
                 </div>
                 <a  class="nav-item nav-link" asp-controller="Home" asp-action="Contact">Contact</a>
+                @if(User.Identity.IsAuthenticated)
+                {
+                    <div style="   margin-right: 20px;
+      white-space: nowrap;
+      color: #0066ff;
+      font-weight: 500;">
+
+                    <a class="nav-item-link" href="#"> Hello @User.Identity.Name</a>
+                     <a class="nav-item-link" asp-controller="Account" asp-action="Logout">Logout</a>
+                    </div>
+                }
+                else
+                {
+                    <a  class="nav-item nav-link" asp-controller="Account" asp-action="Register">Register</a> 
+                <a  class="nav-item nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                }
+                
             </div>
             <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Appointment<i class="fa fa-arrow-right ms-3"></i></a>
         </div>
